@@ -1,17 +1,17 @@
 package studio.robotmonkey1000.boogereater.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.BipedRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Quaternion;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import studio.robotmonkey1000.boogereater.BoogerMain;
@@ -21,7 +21,7 @@ import studio.robotmonkey1000.boogereater.common.configuration.ModConfigurations
 import studio.robotmonkey1000.boogereater.common.entity.EntityBoogerEater;
 
 @OnlyIn(value=Dist.CLIENT)
-public class RenderBoogerEater extends BipedRenderer<EntityBoogerEater, ModelBoogerEater> {
+public class RenderBoogerEater extends HumanoidMobRenderer<EntityBoogerEater, ModelBoogerEater> {
 	
 	//Texture for the booger eaters skin
 	private static final ResourceLocation TEXTURE = new ResourceLocation(BoogerMain.MOD_ID, "textures/entity/booger_eater/booger_eater.png");
@@ -33,14 +33,14 @@ public class RenderBoogerEater extends BipedRenderer<EntityBoogerEater, ModelBoo
 	public static final ResourceLocation BUBBLE = new ResourceLocation(BoogerMain.MOD_ID, "textures/entity/bubble/bubble.png");
 	
 	//Font Renderer for rendering text in the world
-	public static FontRenderer fontrenderer = Minecraft.getInstance().font;
+	public static Font fontrenderer = Minecraft.getInstance().font;
 
-	public RenderBoogerEater(EntityRendererManager rendererManager) {
+	public RenderBoogerEater(EntityRenderDispatcher rendererManager) {
 		super(rendererManager, new ModelBoogerEater(), 0.5f);
 	}
 	
 	@Override
-	public void render(EntityBoogerEater ent, float f, float f2, MatrixStack matrix, IRenderTypeBuffer buffer, int i) {
+	public void render(EntityBoogerEater ent, float f, float f2, PoseStack matrix, MultiBufferSource buffer, int i) {
 		
 		//Render Biped Model
 		super.render(ent, f, f2, matrix, buffer, i);
@@ -64,7 +64,7 @@ public class RenderBoogerEater extends BipedRenderer<EntityBoogerEater, ModelBoo
 			matrix.scale(1.0F, 0.35F, 0.01F);
 			
 			//Get the vertex builder from the texture
-			IVertexBuilder vertex = ItemRenderer.getFoilBuffer(buffer, MODEL_BUBBLE.renderType(BUBBLE), false, false);
+			VertexConsumer vertex = ItemRenderer.getFoilBuffer(buffer, MODEL_BUBBLE.renderType(BUBBLE), false, false);
 			
 			//Render the bubble
 			MODEL_BUBBLE.renderToBuffer( matrix, vertex, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0f);
@@ -82,7 +82,7 @@ public class RenderBoogerEater extends BipedRenderer<EntityBoogerEater, ModelBoo
 	}
 	
 	//Renders the booger eaters message
-	protected void renderText(EntityBoogerEater ent, float rotation, MatrixStack matrix, IRenderTypeBuffer buffer){
+	protected void renderText(EntityBoogerEater ent, float rotation, PoseStack matrix, MultiBufferSource buffer){
 		
 		//Translate the text into the position within the speech bubble
 		matrix.translate(-Math.sin(ent.yBodyRot * 0.017f) * 0.01F, 1.5F, Math.cos(ent.yBodyRot * 0.017f) * 0.01F);

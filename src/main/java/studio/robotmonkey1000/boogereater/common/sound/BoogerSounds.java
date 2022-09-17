@@ -1,7 +1,7 @@
 package studio.robotmonkey1000.boogereater.common.sound;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import studio.robotmonkey1000.boogereater.BoogerMain;
 
 import java.util.ArrayList;

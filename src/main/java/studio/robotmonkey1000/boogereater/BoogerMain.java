@@ -3,10 +3,10 @@ package studio.robotmonkey1000.boogereater;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -41,7 +41,7 @@ public class BoogerMain {
 
 	
 	public static final RegistryObject<EntityType<EntityBoogerEater>> BOOGEREATER = ENTITIES.register(
-		    "boogereater", () -> EntityType.Builder.of(EntityBoogerEater::new, EntityClassification.MONSTER).build("boogereater")
+		    "boogereater", () -> EntityType.Builder.of(EntityBoogerEater::new, MobCategory.MONSTER).build("boogereater")
 		);
 
 	public BoogerMain() {
@@ -70,7 +70,7 @@ public class BoogerMain {
     	@SubscribeEvent
         public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
         	LOGGER.info("Registering Entities");
-        	GlobalEntityTypeAttributes.put(BOOGEREATER.get(), EntityBoogerEater.setCustomAttributes().build());	
+        	DefaultAttributes.put(BOOGEREATER.get(), EntityBoogerEater.setCustomAttributes().build());	
         }
             
         @SubscribeEvent
