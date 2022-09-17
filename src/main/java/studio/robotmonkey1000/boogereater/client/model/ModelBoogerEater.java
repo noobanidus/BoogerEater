@@ -16,12 +16,12 @@ public class ModelBoogerEater extends BipedModel<EntityBoogerEater> {
 	
 	public ModelBoogerEater() {
 		super(0.5f, 1, textureSize, textureSize);
-		this.isChild = true;
+		this.young = true;
 	}
 	
 	@Override
-	public void render(MatrixStack matrix, IVertexBuilder vertex, int i1, int i2, float f1, float f2, float f3, float f4) {
-		super.render(matrix, vertex, i1, i2, f1, f2, f3, f4);
+	public void renderToBuffer(MatrixStack matrix, IVertexBuilder vertex, int i1, int i2, float f1, float f2, float f3, float f4) {
+		super.renderToBuffer(matrix, vertex, i1, i2, f1, f2, f3, f4);
 	}
 	
 	

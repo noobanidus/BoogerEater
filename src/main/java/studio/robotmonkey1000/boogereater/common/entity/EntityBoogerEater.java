@@ -49,18 +49,18 @@ public class EntityBoogerEater extends MonsterEntity {
 	
 	//Defines the attributes like max health and damage
 	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return EntityBoogerEater.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 10).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.31D).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D);
+		return EntityBoogerEater.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.31D).add(Attributes.ATTACK_DAMAGE, 3.0D);
 	}
 
 	//Entity Data to store the message to be displayed on the speech bubble
-	public static final DataParameter<String> MESSAGE = EntityDataManager.createKey(EntityBoogerEater.class, DataSerializers.STRING);
+	public static final DataParameter<String> MESSAGE = EntityDataManager.defineId(EntityBoogerEater.class, DataSerializers.STRING);
 	
 	//Location for the loot table. I don't think I registered it though.
 	public static final ResourceLocation EATER_TABLE = new ResourceLocation(BoogerMain.MOD_ID, "loot_tables/entities/booger_eater.json");	
 	
 	@Nullable
 	@Override
-	protected ResourceLocation getLootTable()
+	protected ResourceLocation getDefaultLootTable()
 	{
 		return EATER_TABLE;
 	}
@@ -85,20 +85,20 @@ public class EntityBoogerEater extends MonsterEntity {
 	@Nullable
 	@Override
 	//Picks a random message to be added to the booger eater when they spawn
-	public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, ILivingEntityData entityData, CompoundNBT nbt) {
-		this.setMessage(ModConfigurations.BOOGER_CONFIG.BoogerSayings.get(rand.nextInt(ModConfigurations.BOOGER_CONFIG.BoogerSayings.size())));
-		return super.onInitialSpawn(world, difficulty, reason, entityData, nbt);
+	public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, ILivingEntityData entityData, CompoundNBT nbt) {
+		this.setMessage(ModConfigurations.BOOGER_CONFIG.BoogerSayings.get(random.nextInt(ModConfigurations.BOOGER_CONFIG.BoogerSayings.size())));
+		return super.finalizeSpawn(world, difficulty, reason, entityData, nbt);
 	}
 
 
 	//Gets the entities message from the datamanager
 	public String getMessage() {
-		return dataManager.get(MESSAGE);
+		return entityData.get(MESSAGE);
 	}
 
 	//Sets the entities message
 	public void setMessage(String data) {
-		dataManager.set(MESSAGE, data);
+		entityData.set(MESSAGE, data);
 	}
 	
 	//Register the AI goals and targets
@@ -120,33 +120,33 @@ public class EntityBoogerEater extends MonsterEntity {
 
 
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		return super.attackEntityAsMob(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), 2.0F);
+	public boolean doHurtTarget(Entity entityIn) {
+		return super.doHurtTarget(entityIn) && entityIn.hurt(DamageSource.mobAttack(this), 2.0F);
 	}
 
 	@Override
-	public boolean isChild() {
+	public boolean isBaby() {
 		return true; // This is always true because booger eaters are always children
 	}
 
 
 	@Override
-	protected void registerData() {
-		super.registerData();
-		this.dataManager.register(MESSAGE, "");
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(MESSAGE, "");
 	}
 
 	@Override
-	public void readAdditional(CompoundNBT compound) {
-		super.readAdditional(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 		
 		//Read Message From NBT Data
 		setMessage(compound.getString("Message"));
 	}
 
 	@Override
-	public void writeAdditional(CompoundNBT compound) {
-		super.writeAdditional(compound);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 		
 		//Save Message to NBT Data
 		compound.putString("Message", getMessage());
@@ -154,7 +154,7 @@ public class EntityBoogerEater extends MonsterEntity {
 	
 //
 	@Override
-	public IPacket<?> createSpawnPacket() {
-		return super.createSpawnPacket();
+	public IPacket<?> getAddEntityPacket() {
+		return super.getAddEntityPacket();
 	}
 }

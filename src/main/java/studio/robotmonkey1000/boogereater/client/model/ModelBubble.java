@@ -14,11 +14,11 @@ public class ModelBubble extends Model {
 	public final ModelRenderer Bubble;
 	
 	public ModelBubble() {
-		super(RenderType::getEntitySolid);
-		this.textureWidth = 64;
-		this.textureHeight = 64;
+		super(RenderType::entitySolid);
+		this.texWidth = 64;
+		this.texHeight = 64;
 		this.Bubble = new ModelRenderer(this, 64, 64);
-		this.Bubble.setRotationPoint(0.0F, 16.0F, 0.0F);
+		this.Bubble.setPos(0.0F, 16.0F, 0.0F);
 		this.Bubble.addBox(-8.0F, -8.0F, -0.5F, 16, 16, 1, 0.0F);
 //		this.Bubble.addBox(100, 100, 100, 100, 100, 100, 100);
 		
@@ -28,7 +28,7 @@ public class ModelBubble extends Model {
 
 
 	@Override
-	public void render(MatrixStack matrix, IVertexBuilder vertex, int packedLight, int packedOverlay, float r, float g, float b, float a) {
+	public void renderToBuffer(MatrixStack matrix, IVertexBuilder vertex, int packedLight, int packedOverlay, float r, float g, float b, float a) {
 //		this.Bubble.render(matrix, vertex, packedLight, packedOverlay, r, g, b, a);
 		//matrix.push();
 		this.Bubble.render(matrix, vertex, packedLight, packedOverlay);

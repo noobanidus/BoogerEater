@@ -41,7 +41,7 @@ public class BoogerMain {
 
 	
 	public static final RegistryObject<EntityType<EntityBoogerEater>> BOOGEREATER = ENTITIES.register(
-		    "boogereater", () -> EntityType.Builder.create(EntityBoogerEater::new, EntityClassification.MONSTER).build("boogereater")
+		    "boogereater", () -> EntityType.Builder.of(EntityBoogerEater::new, EntityClassification.MONSTER).build("boogereater")
 		);
 
 	public BoogerMain() {
@@ -70,7 +70,7 @@ public class BoogerMain {
     	@SubscribeEvent
         public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
         	LOGGER.info("Registering Entities");
-        	GlobalEntityTypeAttributes.put(BOOGEREATER.get(), EntityBoogerEater.setCustomAttributes().create());	
+        	GlobalEntityTypeAttributes.put(BOOGEREATER.get(), EntityBoogerEater.setCustomAttributes().build());	
         }
             
         @SubscribeEvent

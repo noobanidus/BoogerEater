@@ -33,7 +33,7 @@ public class RenderBoogerEater extends BipedRenderer<EntityBoogerEater, ModelBoo
 	public static final ResourceLocation BUBBLE = new ResourceLocation(BoogerMain.MOD_ID, "textures/entity/bubble/bubble.png");
 	
 	//Font Renderer for rendering text in the world
-	public static FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
+	public static FontRenderer fontrenderer = Minecraft.getInstance().font;
 
 	public RenderBoogerEater(EntityRendererManager rendererManager) {
 		super(rendererManager, new ModelBoogerEater(), 0.5f);
@@ -47,36 +47,36 @@ public class RenderBoogerEater extends BipedRenderer<EntityBoogerEater, ModelBoo
 		
 		//If enableSpeechBubble is set to true in the config then render the speech bubble
 		if(ModConfigurations.BOOGER_CONFIG.enableSpeechBubble) {
-			matrix.push();
+			matrix.pushPose();
 			
 			//Bind the texture for the Bubble and set color
-			this.renderManager.textureManager.bindTexture(BUBBLE);
-			buffer.getBuffer(MODEL_BUBBLE.getRenderType(BUBBLE)).color(1.0F, 1.0F, 1.0F, 1.0f);
+			this.entityRenderDispatcher.textureManager.bind(BUBBLE);
+			buffer.getBuffer(MODEL_BUBBLE.renderType(BUBBLE)).color(1.0F, 1.0F, 1.0F, 1.0f);
 			
 			//Move the bubble above the head of the booger eater.
 			matrix.translate(0, 1.01F, 0);
 			
 			//Rotate based on the entities rotation 
-			Quaternion q = new Quaternion(0, 180 - ent.renderYawOffset, 1, true);
-			matrix.rotate(q);
+			Quaternion q = new Quaternion(0, 180 - ent.yBodyRot, 1, true);
+			matrix.mulPose(q);
 			
 			//Scale
 			matrix.scale(1.0F, 0.35F, 0.01F);
 			
 			//Get the vertex builder from the texture
-			IVertexBuilder vertex = ItemRenderer.getBuffer(buffer, MODEL_BUBBLE.getRenderType(BUBBLE), false, false);
+			IVertexBuilder vertex = ItemRenderer.getFoilBuffer(buffer, MODEL_BUBBLE.renderType(BUBBLE), false, false);
 			
 			//Render the bubble
-			MODEL_BUBBLE.render( matrix, vertex, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0f);
-			matrix.pop();
+			MODEL_BUBBLE.renderToBuffer( matrix, vertex, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0f);
+			matrix.popPose();
 			
 			//Render Text Section
-			matrix.push();
+			matrix.pushPose();
 			
 			//Render the text
 			renderText(ent, 1, matrix, buffer);
 			
-			matrix.pop();
+			matrix.popPose();
 		}
 			
 	}
@@ -85,33 +85,33 @@ public class RenderBoogerEater extends BipedRenderer<EntityBoogerEater, ModelBoo
 	protected void renderText(EntityBoogerEater ent, float rotation, MatrixStack matrix, IRenderTypeBuffer buffer){
 		
 		//Translate the text into the position within the speech bubble
-		matrix.translate(-Math.sin(ent.renderYawOffset * 0.017f) * 0.01F, 1.5F, Math.cos(ent.renderYawOffset * 0.017f) * 0.01F);
+		matrix.translate(-Math.sin(ent.yBodyRot * 0.017f) * 0.01F, 1.5F, Math.cos(ent.yBodyRot * 0.017f) * 0.01F);
 		
 		//Scale the text down to fit it into
 		matrix.scale(0.010416667F, 0.010416667F, 0.010416667F);		
 
 		//Rotate the text based on the view of the mob
-		Quaternion q = new Quaternion(0, 180 - ent.renderYawOffset, 1, true);
-		matrix.rotate(q);
+		Quaternion q = new Quaternion(0, 180 - ent.yBodyRot, 1, true);
+		matrix.mulPose(q);
 		
 		//Flip the text because its upside down
 		q = new Quaternion(0, 0, 180, true);
-		matrix.rotate(q);
+		matrix.mulPose(q);
 
 		
-		buffer.getBuffer(MODEL_BUBBLE.getRenderType(BUBBLE)).normal(0, 0, -0.010416667F);
+		buffer.getBuffer(MODEL_BUBBLE.renderType(BUBBLE)).normal(0, 0, -0.010416667F);
 		
 //		GlStateManager.depthMask(false);
 		
 		//Render the message in the world with the RGB value
-		fontrenderer.drawString(matrix, ent.getMessage(), -40, 0, 100);
+		fontrenderer.draw(matrix, ent.getMessage(), -40, 0, 100);
 		
 //		GlStateManager.depthMask(true);
 
-		buffer.getBuffer(MODEL_BUBBLE.getRenderType(BUBBLE)).color(1.0F, 1.0F, 1.0F, 1.0f);
+		buffer.getBuffer(MODEL_BUBBLE.renderType(BUBBLE)).color(1.0F, 1.0F, 1.0F, 1.0f);
 	}
 
-	public ResourceLocation getEntityTexture(EntityBoogerEater entity) {
+	public ResourceLocation getTextureLocation(EntityBoogerEater entity) {
 		return TEXTURE;
 	}
 	
