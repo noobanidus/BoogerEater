@@ -29,14 +29,14 @@ public class BoogerMain {
   private static final Logger LOGGER = LogManager.getLogger();
 
   //Entity Registry
-  private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MOD_ID);
+  private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MOD_ID);
   private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MOD_ID);
 
   public static final RegistryObject<EntityType<EntityBoogerEater>> BOOGEREATER = ENTITIES.register(
       "boogereater", () -> EntityType.Builder.of(EntityBoogerEater::new, MobCategory.MONSTER).build("boogereater"));
-  public static final RegistryObject<SoundEvent> HURT = SOUND_EVENTS.register("booger.eater.hurt", () -> new SoundEvent(new ResourceLocation(MOD_ID, "booger.eater.hurt")));
-  public static final RegistryObject<SoundEvent> IDLE = SOUND_EVENTS.register("booger.eater.idle", () -> new SoundEvent(new ResourceLocation(MOD_ID, "booger.eater.idle")));
-  public static final RegistryObject<SoundEvent> DEATH = SOUND_EVENTS.register("booger.eater.death", () -> new SoundEvent(new ResourceLocation(MOD_ID, "booger.eater.death")));
+  public static final RegistryObject<SoundEvent> HURT = SOUND_EVENTS.register("booger.eater.hurt", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "booger.eater.hurt")));
+  public static final RegistryObject<SoundEvent> IDLE = SOUND_EVENTS.register("booger.eater.idle", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "booger.eater.idle")));
+  public static final RegistryObject<SoundEvent> DEATH = SOUND_EVENTS.register("booger.eater.death", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MOD_ID, "booger.eater.death")));
 
   public BoogerMain() {
     IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();

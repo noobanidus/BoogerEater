@@ -3,6 +3,7 @@ package studio.robotmonkey1000.boogereater.common.entity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -80,7 +81,7 @@ public class EntityBoogerEater extends Monster {
 
   @Override
   public boolean doHurtTarget(Entity entityIn) {
-    return super.doHurtTarget(entityIn) && entityIn.hurt(DamageSource.mobAttack(this), 2.0F);
+    return super.doHurtTarget(entityIn) && entityIn.hurt(this.damageSources().mobAttack(this), 2.0F);
   }
 
   @Override
